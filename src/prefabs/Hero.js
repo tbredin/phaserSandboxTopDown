@@ -62,6 +62,8 @@ export default class extends Phaser.Sprite {
     }
 
     checkState(sprite) {
+        // ideally we would start referencing statemachine classes here,
+        // but I haven't converted them yet; they use module pattern
         if (!sprite.isJumping) {
             return 'walk';
         } else {
