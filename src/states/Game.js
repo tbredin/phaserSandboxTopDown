@@ -38,6 +38,7 @@ export default class extends Phaser.State {
       jumpSpeed: 50
     })
 
+
     this.game.add.existing(this.player);
 
     //the camera will follow the player in the world

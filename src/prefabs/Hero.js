@@ -9,8 +9,7 @@ export default class extends Phaser.Sprite {
 
         this.walkSpeed = walkSpeed;
         this.jumpSpeed = jumpSpeed;
-        this.isJumping = false;
-
+        this.spriteState = 'standing';
 
         this.pixelScale = 2;
         this.anchor.x = 0.5;
@@ -19,7 +18,10 @@ export default class extends Phaser.Sprite {
 
         //  Here we add a new animation called 'walk'
         //  Because we didn't give any other parameters it's going to make an animation from all available frames in the 'mummy' sprite sheet
-        var walk = this.animations.add('walk');
+        this.animations.add('walking');
+        this.animations.add('rolling');
+        this.animations.add('jumping');
+        this.animations.add('falling');
 
         //the camera will follow the player in the world
         this.game.camera.follow(this);
@@ -31,8 +33,6 @@ export default class extends Phaser.Sprite {
 
     update () {
         this.game.physics.arcade.collide(this, this.game.blockedLayer);
-
-        this.animations.play(this.checkState(this), 10, true);
 
         //player movement
         // set velocity as combination of keyboard vectors
@@ -46,28 +46,68 @@ export default class extends Phaser.Sprite {
             this.scale.setTo(-this.pixelScale, this.pixelScale);
         }
 
-        if (this.body.velocity.x == 0 && this.body.velocity.y == 0) {
-          this.animations.stop();
-        }
-        if (this.game.input.keyboard.isDown(Phaser.Keyboard.SHIFT) && !this.isJumping) {
-            console.log('jump')
-            this.body.velocity.y -= this.jumpSpeed;
-            this.isJumping = true;
+        if (this.spriteState != 'rolling' && this.spriteState != 'jumping' && this.spriteState != 'falling') {
+            if (this.body.velocity.x > 0 || this.body.velocity.x < 0 || this.body.velocity.y > 0 || this.body.velocity.y < 0) {
+                this.spriteState = 'walking';
+            } else if (this.body.velocity.x == 0 && this.body.velocity.y == 0) {
+                this.spriteState = 'standing';
+            }
+
+            if (this.game.input.keyboard.isDown(Phaser.Keyboard.SHIFT)) {
+                this.spriteState = 'rolling';
+            }
+
+            if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+                // this.body.velocity.y -= this.jumpSpeed;
+                this.spriteState = 'jumping';
+            }
         }
 
-        if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && !this.isJumping) {
-            console.log('attack')
-            this.attack();
+        if (this.lastSpriteState != this.spriteState) {
+            this.handleSpriteStates();
+            console.log(this.spriteState);
         }
+
+        this.lastSpriteState = this.spriteState;
     }
 
-    checkState(sprite) {
-        // ideally we would start referencing statemachine classes here,
-        // but I haven't converted them yet; they use module pattern
-        if (!sprite.isJumping) {
-            return 'walk';
+    handleSpriteStates () {
+        // console.log(this.animations.currentAnim)
+
+        if (this.spriteState == 'walking') {
+            this.loadTexture('pilgrim_walk', 0);
+            this.animations.play('walking', 10, true);
+        } else if (this.spriteState == 'jumping') {
+            this.loadTexture('pilgrim_roll', 0);
+            this.animations.play('jumping', 10, false);
+
+            this.animations.currentAnim.onComplete.add(function (instance) {
+                console.log('animEnd: to falling')
+
+                instance.spriteState = 'falling';
+            });
+        } else if (this.spriteState == 'falling') {
+            this.loadTexture('pilgrim_roll', 0);
+            this.animations.play('falling', 10, false);
+
+            this.animations.currentAnim.onComplete.add(function (instance) {
+                console.log('animEnd: to standing')
+
+                instance.spriteState = 'standing';
+            });
+        } else if (this.spriteState == 'rolling') {
+            this.loadTexture('pilgrim_roll', 0);
+            this.animations.play('rolling', 10, false);
+
+            this.animations.currentAnim.onComplete.add(function (instance) {
+                console.log('animEnd: to standing')
+
+                instance.spriteState = 'standing';
+            });
         } else {
-            return 'jump';
+            this.loadTexture('pilgrim_walk', 0);
+            // default is standing
+            this.animations.stop();
         }
     }
 }
