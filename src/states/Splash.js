@@ -11,13 +11,19 @@ export default class extends Phaser.State {
 
     this.load.setPreloadSprite(this.loaderBar)
 
+    if (__DEV__) {
+        this.assetPath = '';
+    } else {
+        this.assetPath = 'pilgrim2/';
+    }
+
     //
     // load assets here
     //
-    this.load.tilemap('level01', 'assets/tilemaps/tiled01.json', null, Phaser.Tilemap.TILED_JSON)
-    this.load.image('gameTilesCliffSet', 'assets/images/Hanzo-CliffSet02VS-1.png')
-    this.load.atlasJSONHash('pilgrim_walk', 'assets/images/pilgrim_walk.png', 'assets/spritemaps/pilgrim_walk.json');
-    this.load.atlasJSONHash('pilgrim_roll', 'assets/images/pilgrim_roll.png', 'assets/spritemaps/pilgrim_roll.json');
+    this.load.tilemap('level01', this.assetPath + 'assets/tilemaps/tiled01.json', null, Phaser.Tilemap.TILED_JSON)
+    this.load.image('gameTilesCliffSet', this.assetPath + 'assets/images/Hanzo-CliffSet02VS-1.png')
+    this.load.atlasJSONHash('pilgrim_walk', this.assetPath + 'assets/images/pilgrim_walk.png', this.assetPath + 'assets/spritemaps/pilgrim_walk.json');
+    this.load.atlasJSONHash('pilgrim_roll', this.assetPath + 'assets/images/pilgrim_roll.png', this.assetPath + 'assets/spritemaps/pilgrim_roll.json');
   }
 
   create () {

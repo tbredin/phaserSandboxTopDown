@@ -3,3 +3,11 @@ export const centerGameObjects = (objects) => {
     object.anchor.setTo(0.5)
   })
 }
+
+export const assetPath = () => {
+    if (__DEV__) {
+        return '';
+    } else {
+        return 'pilgrim2/';
+    }
+}

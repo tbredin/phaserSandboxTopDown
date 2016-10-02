@@ -34,8 +34,9 @@ export default class extends Phaser.State {
       x: result[0].x,
       y: result[0].y,
       asset: 'pilgrim_walk',
-      walkSpeed: 50,
-      jumpSpeed: 50
+      walkSpeed: 80,
+      jumpSpeed: 120,
+      fps: 12
     })
 
 
@@ -54,7 +55,7 @@ export default class extends Phaser.State {
   }
 
   update () {
-
+    this.game.physics.arcade.collide(this.player, this.blockedLayer);
   }
 
   //find objects in a Tiled layer that containt a property called "type" equal to a certain value
@@ -62,8 +63,6 @@ export default class extends Phaser.State {
     var result = new Array();
 
     map.objects[layer].forEach(function(element){
-      console.log(element.type);
-
       if(element.type === type) {
 
         //Phaser uses top left, Tiled bottom left so we have to adjust
