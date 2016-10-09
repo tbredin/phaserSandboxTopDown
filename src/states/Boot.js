@@ -7,9 +7,20 @@ export default class extends Phaser.State {
     this.stage.backgroundColor = '#222'
     this.fontsReady = false
     this.fontsLoaded = this.fontsLoaded.bind(this)
+
   }
 
   preload () {
+    // scale the game 2x
+    this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+    this.game.scale.setUserScale(2, 2);
+
+    // enable crisp rendering
+    this.game.renderer.renderSession.roundPixels = true;
+    Phaser.Canvas.setImageRenderingCrisp(this.game.canvas)
+    this.game.stage.smoothed = false;
+    this.game.renderer.renderSession.roundPixels = true
+
     WebFont.load({
       google: {
         families: ['Roboto']
@@ -22,7 +33,7 @@ export default class extends Phaser.State {
       this.world.centerY,
       'loading fonts',
       {
-        font: '16px Arial',
+        font: '9px Arial',
         fill: '#dddddd',
         align: 'center'
       }

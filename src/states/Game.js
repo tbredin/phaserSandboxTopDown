@@ -11,39 +11,41 @@ export default class extends Phaser.State {
     this.map = this.game.add.tilemap('level01');
 
     //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
-    this.map.addTilesetImage('Hanzo-CliffSet02VS-1', 'gameTilesCliffSet');
+    this.map.addTilesetImage('Base', 'gameTilesMaze');
 
     //create layer
-    this.backgroundlayer = this.map.createLayer('layer_ground');
-    this.abovelayer = this.map.createLayer('layer_top');
-    this.blockedLayer = this.map.createLayer('layer_obstacles');
+    this.layerBackground = this.map.createLayer('terrain-background');
+    this.layerObstacles = this.map.createLayer('terrain-obstacles');
+    this.layerOverlay = this.map.createLayer('terrain-overlays');
 
-    //collision on blockedLayer
-    this.map.setCollisionBetween(1, 100000, true, 'layer_obstacles');
+    //collision on layerObstacles
+    this.map.setCollisionBetween(1, 100000, true, 'terrain-obstacles');
 
     //resizes the game world to match the layer dimensions
-    this.backgroundlayer.resizeWorld();
-
-    this.pixelScale = 2;
+    this.layerBackground.resizeWorld();
 
     //create player
-    let result = this.findObjectsByType('playerStart', this.map, 'objectsLayer');
+    let result = this.findObjectsByType('playerStart', this.map, 'objects-items');
 
     this.player = new Hero({
       game: this.game,
       x: result[0].x,
       y: result[0].y,
-      asset: 'pilgrim_walk',
-      walkSpeed: 80,
-      jumpSpeed: 120,
-      fps: 12
+      asset: 'green_run',
+      walkSpeed: 70,
+      jumpSpeed: 110,
+      fps: 8
     })
 
 
     this.game.add.existing(this.player);
 
+    this.layerTop = this.map.createLayer('terrain-top');
+    this.layerTop2 = this.map.createLayer('terrain-top-2');
+
     //the camera will follow the player in the world
     this.game.camera.follow(this.player);
+
 
     // // adding text
     // let banner = this.add.text(this.game.world.centerX, this.game.height - 30, 'Phaser + ES6 + Webpack')
@@ -55,7 +57,7 @@ export default class extends Phaser.State {
   }
 
   update () {
-    this.game.physics.arcade.collide(this.player, this.blockedLayer);
+    this.game.physics.arcade.collide(this.player, this.layerObstacles);
   }
 
   //find objects in a Tiled layer that containt a property called "type" equal to a certain value
@@ -77,6 +79,7 @@ export default class extends Phaser.State {
 
   render () {
     if (__DEV__) {
+      this.game.debug.font = '10px Courier'
       this.game.debug.spriteInfo(this.player, 32, 32)
     }
   }

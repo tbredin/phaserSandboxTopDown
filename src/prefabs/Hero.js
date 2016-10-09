@@ -15,7 +15,7 @@ export default class extends Phaser.Sprite {
         this.jumpSpeed = jumpSpeed;
         this.fps = fps;
 
-        this.pixelScale = 2;
+        this.pixelScale = 1;
         this.anchor.x = 0.5;
         this.anchor.y = 1;
         this.scale.setTo(this.pixelScale, this.pixelScale);
@@ -48,13 +48,13 @@ export default class extends Phaser.Sprite {
                 onidle:  function(event, from, to) {
                     console.log(this.current);
 
-                    sprite.loadTexture('pilgrim_walk', 0);
+                    sprite.loadTexture('green_stand', 0, true);
                     sprite.animations.stop();
                 },
                 onwalk:  function(event, from, to) {
                     console.log(this.current);
 
-                    sprite.loadTexture('pilgrim_walk', 0);
+                    sprite.loadTexture('green_run', 0);
                     sprite.animations.play('walking', sprite.fps, true);
                 },
                 onjump:  function(event, from, to) {

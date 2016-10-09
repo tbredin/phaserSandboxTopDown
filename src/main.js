@@ -11,8 +11,8 @@ import GameState from './states/Game'
 class Game extends Phaser.Game {
 
   constructor () {
-    let width = document.documentElement.clientWidth
-    let height = document.documentElement.clientHeight
+    let width = document.documentElement.clientWidth / 2
+    let height = document.documentElement.clientHeight / 2
 
     super(width, height, Phaser.AUTO, 'content', null, false, false)
 

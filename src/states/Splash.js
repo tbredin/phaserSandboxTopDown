@@ -20,10 +20,12 @@ export default class extends Phaser.State {
     //
     // load assets here
     //
-    this.load.tilemap('level01', this.assetPath + 'assets/tilemaps/tiled01.json', null, Phaser.Tilemap.TILED_JSON)
-    this.load.image('gameTilesCliffSet', this.assetPath + 'assets/images/Hanzo-CliffSet02VS-1.png')
+    this.load.tilemap('level01', this.assetPath + 'assets/tilemaps/level01.json', null, Phaser.Tilemap.TILED_JSON)
+    this.load.image('gameTilesMaze', this.assetPath + 'assets/images/danktiles3.png')
     this.load.atlasJSONHash('pilgrim_walk', this.assetPath + 'assets/images/pilgrim_walk.png', this.assetPath + 'assets/spritemaps/pilgrim_walk.json');
     this.load.atlasJSONHash('pilgrim_roll', this.assetPath + 'assets/images/pilgrim_roll.png', this.assetPath + 'assets/spritemaps/pilgrim_roll.json');
+    this.load.image('green_stand', this.assetPath + this.assetPath + 'assets/images/green_stand.png')
+    this.load.atlasJSONHash('green_run', this.assetPath + 'assets/images/green_run.png', this.assetPath + 'assets/spritemaps/green_run.json');
   }
 
   create () {
